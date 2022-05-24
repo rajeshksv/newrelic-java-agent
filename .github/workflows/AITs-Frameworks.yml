@@ -20,7 +20,7 @@ on:
 jobs:
   tests:
     name: Frameworks
-    timeout-minutes: 120
+    timeout-minutes: 180
     runs-on: ubuntu-latest
     # Determine if easier to make the env strings below part of the matrix
     env:
