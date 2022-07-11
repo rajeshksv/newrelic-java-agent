@@ -9,6 +9,7 @@ package com.nr.agent.instrumentation.log4j2;
 
 import com.newrelic.agent.bridge.AgentBridge;
 import com.newrelic.api.agent.NewRelic;
+import com.newrelic.api.agent.TraceMetadata;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.message.Message;
@@ -90,6 +91,14 @@ public class AgentUtil {
             appendAttributeToBlob(agentLinkingMetadata.get(TRACE_ID), blob);
             appendAttributeToBlob(agentLinkingMetadata.get(SPAN_ID), blob);
             appendAttributeToBlob(urlEncode(agentLinkingMetadata.get(ENTITY_NAME)), blob);
+
+            // Any feature flags ??
+            TraceMetadata traceMetadata = NewRelic.getAgent().getTraceMetadata();
+            if (traceMetadata != null) {
+                appendAttributeToBlob(String.valueOf(traceMetadata.isSampled()), blob);
+            } else {
+                // This should never happen. But what to do if it happens ? Add empty value ?
+            }
         }
         return blob.toString();
     }
